@@ -41,3 +41,8 @@ minikube delete
 eval $(minikube -p minikube docker-env)
 docker image ls
 ```
+
+## SSH into VM
+```shell script
+minikube ssh
+```

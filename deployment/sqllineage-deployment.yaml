@@ -1,16 +1,3 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: sqllineage-deployment-service
-  labels:
-    app: sqllineage
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 5000
-  selector:
-    app: sqllineage
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -31,3 +18,16 @@ spec:
   selector:
     matchLabels:
       app: sqllineage
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqllineage-service
+  labels:
+    app: sqllineage
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5000
+  selector:
+    app: sqllineage

@@ -4,9 +4,10 @@ Deployment
 This folder stores all the kubernetes deployment yaml for different services
 
 ```shell script
-kubectl apply -f deployment/minio-deployment.yaml
-kubectl port-forward deployment/minio-deployment 9000:9000
+kubectl apply -f deployment/<app>-deployment.yaml
 
-kubectl apply -f deployment/sqllineage-deployment.yaml
-minikube service sqllineage-deployment-service
+# visit service
+minikube service <app>-service
+# or alternatively forwarding the deployment port to localhost
+kubectl port-forward deployment/<app>-deployment <local_port>:<deployment_port>
 ```

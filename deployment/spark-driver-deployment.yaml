@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: spark-service-account
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: spark-cluster-role
+rules:
+  - apiGroups: [ "" ]
+    resources: [ "pods", "services", "configmaps" ]
+    verbs: [ "create", "get", "watch", "list", "post", "delete" ]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: spark-cluster-role-binding
+subjects:
+  - kind: ServiceAccount
+    name: spark-service-account
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: spark-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-driver-deployment
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: spark-driver
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      serviceAccountName: spark-service-account
+      containers:
+        - name: spark-driver
+          image: datamechanics/spark:3.1-latest
+          command: [ "tail" ]
+          args: [ "-f", "/dev/null" ]
+  selector:
+    matchLabels:
+      app: spark-driver
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-driver-service
+spec:
+  selector:
+    app: spark-driver
+  ports:
+    - protocol: TCP
+      port: 8080
+  clusterIP: None

@@ -39,7 +39,7 @@ TODO
     
         Not much choice we have here since Kafka is almost industry standard for event streaming data storage
     
-    - [ ] RDBMS: [MySQL](https://www.mysql.com/)
+    - [x] RDBMS: [MySQL](https://www.mysql.com/)
     
         To support the persistent requirement of L2
 

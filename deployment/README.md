@@ -43,11 +43,13 @@ Using spark-shell
   --conf spark.hadoop.fs.s3a.endpoint=http://minio-service:9000 \
   --conf spark.hadoop.fs.s3a.access.key=minioadmin \
   --conf spark.hadoop.fs.s3a.secret.key=minioadmin \
-  --conf spark.hadoop.fs.s3a.path.style.access=true
+  --conf spark.hadoop.fs.s3a.path.style.access=true \
+  --conf spark.hadoop.hive.metastore.uris=thrift://metastore:9083 \
+  --conf spark.sql.warehouse.dir=s3a://warehouse/
 ```
 ```scala
 val df = spark.range(10e6.toLong).withColumn("part", $"id" % 2)
-df.write.option("path", "s3a://warehouse/default.db/test_table").partitionBy("part").mode("overwrite").saveAsTable("test_table")
+df.write.partitionBy("part").mode("overwrite").saveAsTable("test_table")
 ```
 
 Using spark-sql
@@ -63,7 +65,9 @@ Using spark-sql
   --conf spark.hadoop.fs.s3a.endpoint=http://minio-service:9000 \
   --conf spark.hadoop.fs.s3a.access.key=minioadmin \
   --conf spark.hadoop.fs.s3a.secret.key=minioadmin \
-  --conf spark.hadoop.fs.s3a.path.style.access=true
+  --conf spark.hadoop.fs.s3a.path.style.access=true \
+  --conf spark.hadoop.hive.metastore.uris=thrift://metastore:9083 \
+  --conf spark.sql.warehouse.dir=s3a://warehouse/
 ```
 ```sql
 SELECT * FROM default.test_table LIMIT 10;

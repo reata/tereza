@@ -45,7 +45,7 @@ TODO
 
 - L2: Metadata Service Layer
 
-    - [ ] Hive Metastore
+    - [x] Hive Metastore
     
         To support the MinIO metadata querying requirement from L3 
     
